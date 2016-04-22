@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -7,9 +6,50 @@
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
   </head>
   <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
-    <script>
-      // Run queries and display results here
-    </script>
+  <script id='query'>
+    function main() {
+        return Events({
+            from_date: params.from_date,
+            to_date: params.to_date,
+        })
+       .filter(function(event) {return event.name == params.event && event.properties.Duration > 100000;})
+       .groupBy(["properties.Duration", function(event) { return new Date(event.time).toString().substr(0,10);}], mixpanel.reducer.count());
+    }
+  </script>
+  Date: <br>
+  <div id="dateSelect"></div>
+  <div id="graph"></div><br>
+  <div id="table" style='width:943px'></div><br>
+  <script>
+  var script = document.getElementById('query').innerHTML;
+  var dateSelect = $('#dateSelect').MPDatepicker();
+  var eventGraph  = $('#graph').MPChart({chartType: 'line'});
+  var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Frequency'});
+  function runQuery() {
+    var params = {
+      'from_date': dateSelect.MPDatepicker('value').from.toISOString().slice(0, -14),
+      'to_date': dateSelect.MPDatepicker('value').to.toISOString().slice(0, -14),
+      'event': 'Broadcast'
+    };
+    MP.api.custom_query(script, params).done(function(results) {
+      var graphRes = {}; graphRes['Duration'] = {};
+      var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
+      console.log(res);
+      _.each(results, function(item) {
+        console.log(item);
+        if(graphRes['Duration'][item.key[1]] == undefined) {
+          graphRes['Duration'][item.key[1]] = 1
+        } else {
+          graphRes['Duration'][item.key[1]] += 1
+        }
+      });
+      console.log(res);
+      eventGraph.MPChart('setData', graphRes);
+      eventTable.MPTable('setData', res);
+    });
+  }
+  dateSelect.on('change', function() {runQuery();});
+  runQuery();
+  </script>
   </body>
 </html>
