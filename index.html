@@ -16,6 +16,7 @@
        .groupBy(["properties.Duration", function(event) { return new Date(event.time).toString().substr(0,10);}], mixpanel.reducer.count());
     }
   </script>
+  <div class="mixpanel-platform-section">
   <div id="dateSelect" style="float: right;"></div>
   <div id="input" style="float: left;"><input type="text" id="selector"></div>
   <div style="clear: both;"></div>
@@ -23,7 +24,6 @@
   <div id="table"></div>
   </div>
   <script>
-  document.getElementById("selector").defaultValue = "95";
   var script = document.getElementById('query').innerHTML;
   var dateSelect = $('#dateSelect').MPDatepicker();
   var eventGraph = $('#graph').MPChart({chartType: 'line'});
