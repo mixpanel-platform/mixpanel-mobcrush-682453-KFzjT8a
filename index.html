@@ -17,15 +17,15 @@
     }
   </script>
   <div class="mixpanel-platform-section">
-  <div id="dateSelect" style="float: right;"></div>
-  <div id="input" style="float: left;"><input type="text" id="selector"></div>
-  <div id="graph"></div>
+    <div id="dateSelect" style="float: right;"></div>
+    <div id="input" style="float: left;"><input type="text" id="selector"></div>
+    <div id="graph"></div>
   </div>
-  <div id="table" style='width:943px'></div>
+  <div id="table"></div>
   <script>
   var script = document.getElementById('query').innerHTML;
   var dateSelect = $('#dateSelect').MPDatepicker();
-  var eventGraph  = $('#graph').MPChart({chartType: 'line'});
+  var eventGraph = $('#graph').MPChart({chartType: 'line'});
   var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Frequency'});
   function runQuery() {
     var params = {
