@@ -52,7 +52,7 @@
       _.each(results, function(item) {
         variance += item.key[0] * item.key[0];
       });
-      stddev = sqrt(variance / mean);
+      stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
         if(item.key[0] > mean + 2*stddev) {
