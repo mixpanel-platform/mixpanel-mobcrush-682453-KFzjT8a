@@ -67,10 +67,10 @@
       _.each(results, function(item) {
         if(findP((item.key[0] - mean) / stddev) > Number(confidence)/100) {
           console.log("entered");
-          if(graphRes['Outliers'][item.key[0]] === undefined) {
-            outliers['Outliers'][item.key[0]] = {};
+          if(graphRes['Outliers'][item.key[1]] === undefined) {
+            outliers['Outliers'][item.key[1]] = {};
           }
-          outliers['Outliers'][item.key[0]] = item.key[1];
+          outliers['Outliers'][item.key[1]] = item.key[1];
         }
       });
       console.log(graphRes);
