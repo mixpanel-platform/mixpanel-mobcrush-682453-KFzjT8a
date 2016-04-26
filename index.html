@@ -17,7 +17,8 @@
     }
   </script>
   <div class="mixpanel-platform-section">
-  <div id="dateSelect" style="float: left;"></div>
+  <div id="dateSelect" style="float: right;"></div>
+  <div id="input" style="float: left;"><input type="text" id="selector"></div>
   <div style="clear: both;"></div>
   <div id="graph"></div>
   <div id="table"></div>
@@ -25,7 +26,7 @@
   <script>
   var script = document.getElementById('query').innerHTML;
   var dateSelect = $('#dateSelect').MPDatepicker();
-  var eventGraph = $('#graph').MPChart({chartType: 'bar'});
+  var eventGraph = $('#graph').MPChart({chartType: 'line'});
   var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Duration'});
   function runQuery() {
     var params = {
@@ -34,7 +35,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; outliers['Outliers'] = 0; outliers['-1σ'] = 0; outliers['+1σ'] = 0; outliers['+2σ'] = 0; outliers['+3σ'] = 0; var tableOutliers = {};
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; var tableOutliers = {}: outliers['10%'] = 0; outliers['20%'] = 0; outliers['30%'] = 0; outliers['40%'] = 0; outliers['50%'] = 0; outliers['60%'] = 0; outliers['70%'] = 0; outliers['80%'] = 0; outliers['90%'] = 0; outliers['100%'] = 0;
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
@@ -57,21 +58,31 @@
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
-        var zscore = (item.key[0] - mean) / stddev;
-        if(zscore < 0) {
-          outliers['-1σ'] += 1;
-        } else if(zscore < 1) {
-          outliers['+1σ'] += 1;
-        } else if(zscore < 2) {
-          outliers['+2σ'] += 1;
-        } else if(zscore < 3) {
-          outliers['+3σ'] += 1;
+        var zscore = findP((item.key[0] - mean) / stddev);
+        if(p < .1) {
+          outliers['10%'] += 1;
+        } else if(p < .2) {
+          outliers['20%'] += 1;
+        } else if(p < .3) {
+          outliers['30%'] += 1;
+        } else if(p < .4) {
+          outliers['40%'] += 1;
+        } else ifp < .5) {
+          outliers['50%'] += 1;
+        } else if(p < .6) {
+          outliers['60%'] += 1;
+        } else if(p < .7) {
+          outliers['70%'] += 1;
+        } else if(p < .8) {
+          outliers['80%'] += 1;
+        } else if(p < .9) {
+          outliers['90%'] += 1;
         } else {
-          outliers['Outliers'] += 1;
+          outliers['100%'] += 1;
           if(tableOutliers[item.key[0]] === undefined) {
             tableOutliers[item.key[0]] = {};
+            tableOutliers[item.key[0]] = item.key[1];
           }
-          tableOutliers[item.key[0]] = item.key[1];
         }
       });
       console.log(outliers);
@@ -81,11 +92,42 @@
       }
       delete graphRes['All'];
       eventGraph.MPChart('setData', outliers);
-      eventTable.MPTable('setData', tableOutliers);
+      eventTable.MPTable('setData', outliers);
     });
   }
   
+  function findP(z) 
+  {
+    //z == number of standard deviations from the mean
+
+    //if z is greater than 6.5 standard deviations from the mean
+    //the number of significant digits will be outside of a reasonable 
+    //range
+    if ( z < -6.5)
+      return 0.0;
+    if( z > 6.5) 
+      return 1.0;
+
+    var factK = 1;
+    var sum = 0;
+    var term = 1;
+    var k = 0;
+    var loopStop = Math.exp(-23);
+    while(Math.abs(term) > loopStop) 
+    {
+      term = .3989422804 * Math.pow(-1,k) * Math.pow(z,k) / (2 * k + 1) / Math.pow(2,k) * Math.pow(z,k+1) / factK;
+      sum += term;
+      k++;
+      factK *= k;
+
+    }
+    sum += 0.5;
+
+    return sum;
+  }
+  
   dateSelect.on('change', function() {runQuery();});
+  $('#selector').change(function () {runQuery();})
   runQuery();
   </script>
   </body>
