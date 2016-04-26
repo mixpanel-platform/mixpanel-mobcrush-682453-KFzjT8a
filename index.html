@@ -64,14 +64,10 @@
         }
       });
       console.log(graphRes);
-      _.each(graphRes['All'], function(item) {
-        console.log('item');
-        console.log(item);
-        console.log(item.key);
-        console.log(item.value);
-        graphRes['Average'][item.key] = graphRes['All'][item.key] / graphRes['Total'][item.key];
-      })
-      
+      var keys = Object.keys(graphRes['All']);
+      for(i=o; i<keys.length; i++) {
+        graphRes['Average'][keys[i]] = graphRes['All'][keys[i]] / graphRes['Total'][keys[i]];
+      }
       console.log(graphRes);
       eventGraph.MPChart('setData', graphRes);
       eventTable.MPTable('setData', graphRes['Outliers']);
