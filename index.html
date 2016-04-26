@@ -58,7 +58,7 @@
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
-        var zscore = findP((item.key[0] - mean) / stddev);
+        var p = findP((item.key[0] - mean) / stddev);
         if(p < .1) {
           outliers['10%'] += 1;
         } else if(p < .2) {
