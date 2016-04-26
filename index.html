@@ -17,8 +17,7 @@
     }
   </script>
   <div class="mixpanel-platform-section">
-  <div id="dateSelect" style="float: right;"></div>
-  <div id="input" style="float: left;"><input type="text" id="selector"></div>
+  <div id="dateSelect" style="float: left;"></div>
   <div style="clear: both;"></div>
   <div id="graph"></div>
   <div id="table"></div>
@@ -36,7 +35,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; outliers['Outliers'] = 0; outliers['-1σ'] = 0; outliers['+1σ'] = 0; outliers['+2σ'] = 0; outliers['+3σ'] = 0; var tableOutliers = {}:
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; outliers['Outliers'] = 0; outliers['-1σ'] = 0; outliers['+1σ'] = 0; outliers['+2σ'] = 0; outliers['+3σ'] = 0; var tableOutliers = {};
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
