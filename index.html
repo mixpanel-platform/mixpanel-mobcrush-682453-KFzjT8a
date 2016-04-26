@@ -64,14 +64,11 @@
         }
       });
       console.log(graphRes);
-      _.each(graphRes, function(item) {
+      _.each(graphRes[0], function(item) {
         console.log(item);
         console.log(item.key);
         console.log(item.value);
-        var keys = Object.keys(item);
-        for(i=0; i<item.length; i++) {
-          graphRes['Average'][item[keys[i]]] = graphRes['All'][item[keys[i]]] / graphRes['Total'][item[keys[i]]];
-        }
+        graphRes['Average'][item.key] = graphRes['All'][item.key] / graphRes['Total'][item.key;
       })
       graphRes.splice('All');
       graphRes.splice('Total');
