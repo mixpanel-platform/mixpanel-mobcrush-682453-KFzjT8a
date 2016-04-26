@@ -16,7 +16,6 @@
        .groupBy(["properties.Duration", function(event) { return new Date(event.time).toString().substr(0,10);}], mixpanel.reducer.count());
     }
   </script>
-  Confidence: <div class="mixpanel-platform-section">
   <div id="dateSelect" style="float: right;"></div>
   <div id="input" style="float: left;"><input type="text" id="selector"></div>
   <div style="clear: both;"></div>
@@ -26,7 +25,6 @@
   <script>
   document.getElementById("selector").defaultValue = "95";
   var script = document.getElementById('query').innerHTML;
-  var confidence = document.getElementById('selector').value;
   var dateSelect = $('#dateSelect').MPDatepicker();
   var eventGraph = $('#graph').MPChart({chartType: 'line'});
   var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Duration'});
@@ -38,7 +36,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; outliers['Outliers'] = {}; outliers['-1σ'] = {}; outliers['+1σ'] = {}; outliers['+2σ'] = {}; outliers['+3σ'] = {};
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; outliers['Outliers'] = 0; outliers['-1σ'] = 0; outliers['+1σ'] = 0; outliers['+2σ'] = 0; outliers['+3σ'] = 0; var tableOutliers = {}:
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
@@ -61,7 +59,7 @@
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
-        var zscore = findP((item.key[0] - mean) / stddev);
+        var zscore = (item.key[0] - mean) / stddev;
         if(zscore < 0) {
           outliers['-1σ'] += 1;
         } else if(zscore < 1) {
@@ -72,50 +70,24 @@
           outliers['+3σ'] += 1;
         } else {
           outliers['Outliers'] += 1;
+          if(tableOutliers[item.key[0]] === undefined) {
+            tableOutliers[item.key[0]] = {};
+          }
+          tableOutliers[item.key[0]] = item.key[1];
         }
       });
+      console.log(outliers);
       var keys = Object.keys(graphRes['All']);
       for(i=0; i<keys.length; i++) {
         graphRes['Average'][keys[i]] = graphRes['All'][keys[i]] / graphRes['Total'][keys[i]];
       }
       delete graphRes['All'];
       eventGraph.MPChart('setData', outliers);
-      eventTable.MPTable('setData', outliers);
+      eventTable.MPTable('setData', tableOutliers);
     });
   }
   
-  function findP(z) 
-  {
-    //z == number of standard deviations from the mean
-
-    //if z is greater than 6.5 standard deviations from the mean
-    //the number of significant digits will be outside of a reasonable 
-    //range
-    if ( z < -6.5)
-      return 0.0;
-    if( z > 6.5) 
-      return 1.0;
-
-    var factK = 1;
-    var sum = 0;
-    var term = 1;
-    var k = 0;
-    var loopStop = Math.exp(-23);
-    while(Math.abs(term) > loopStop) 
-    {
-      term = .3989422804 * Math.pow(-1,k) * Math.pow(z,k) / (2 * k + 1) / Math.pow(2,k) * Math.pow(z,k+1) / factK;
-      sum += term;
-      k++;
-      factK *= k;
-
-    }
-    sum += 0.5;
-
-    return sum;
-  }
-  
   dateSelect.on('change', function() {runQuery();});
-  $('#selector').change(function () {runQuery();})
   runQuery();
   </script>
   </body>
