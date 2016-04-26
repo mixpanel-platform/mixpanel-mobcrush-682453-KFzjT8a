@@ -84,16 +84,16 @@
           }
         }
       });
-      outliers['Mean'] = mean;
-      outlier['Std Dev'] = stddev;
-      outlier['Total'] = total;
+      
       console.log(outliers);
       var keys = Object.keys(graphRes['All']);
       for(i=0; i<keys.length; i++) {
         graphRes['Average'][keys[i]] = graphRes['All'][keys[i]] / graphRes['Total'][keys[i]];
       }
-      delete graphRes['All'];
       eventGraph.MPChart('setData', outliers);
+      outliers['Mean'] = mean;
+      outlier['Std Dev'] = stddev;
+      outlier['Total'] = total;
       eventTable.MPTable('setData', outliers);
     });
   }
