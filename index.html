@@ -61,6 +61,7 @@
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       function findZ(p) {
+        console.log(p);
         var a0= 2.5066282,  a1=-18.6150006,  a2= 41.3911977,   a3=-25.4410605,
             b1=-8.4735109,  b2= 23.0833674,  b3=-21.0622410,   b4=  3.1308291,
             c0=-2.7871893,  c1= -2.2979648,  c2=  4.8501413,   c3=  2.3212128,
@@ -77,6 +78,8 @@
         return z;
       }
       var zscore = findZ(Number(confidence)/100);
+      console.log(confidence);
+      console.log(Number(confidence));
       console.log(zscore);
       _.each(results, function(item) {
         if(item.key[0] > mean + zscore*stddev) {
