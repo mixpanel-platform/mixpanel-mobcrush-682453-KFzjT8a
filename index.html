@@ -69,7 +69,9 @@
     
         if (p>0.42) {
             r=Math.sqrt(-Math.log(0.5-p));
+            console.log(r);
             z=(((c3*r+c2)*r+c1)*r+c0)/((d2*r+d1)*r+1);
+            console.log(z);
         } else {
             r=p*p;
             z=p*(((a3*r+a2)*r+a1)*r+a0)/((((b4*r+b3)*r+b2)*r+b1)*r+1);
