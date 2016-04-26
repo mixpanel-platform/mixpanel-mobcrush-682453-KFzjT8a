@@ -65,7 +65,7 @@
       });
       console.log(graphRes);
       var keys = Object.keys(graphRes['All']);
-      for(i=o; i<keys.length; i++) {
+      for(i=0; i<keys.length; i++) {
         graphRes['Average'][keys[i]] = graphRes['All'][keys[i]] / graphRes['Total'][keys[i]];
       }
       console.log(graphRes);
