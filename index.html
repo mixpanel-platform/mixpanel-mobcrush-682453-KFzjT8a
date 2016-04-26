@@ -63,6 +63,7 @@
         }
       });
       _.each(graphRes['All'], function(item) {
+        console.log(item);
         graphRes['Average'][item.key[0]] = graphRes['All'][item.key[0]] / graphRes['Total'][item.key[0]];
       })
       graphRes.splice('All');
