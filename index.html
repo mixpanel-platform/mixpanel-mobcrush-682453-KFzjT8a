@@ -63,7 +63,7 @@
       var zscore = findZ(confidence/100);
       _.each(results, function(item) {
         console.log(findZ(confidence/100));
-        
+        console.log(zscore);
         if(item.key[0] > mean + findZ(confidence/100)*stddev) {
           console.log("entered");
           if(graphRes['Outliers'][item.key[1]] == undefined) {
