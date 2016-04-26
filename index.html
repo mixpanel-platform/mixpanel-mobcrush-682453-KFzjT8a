@@ -38,7 +38,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Outliers'] = {}; graphRes['Total'] = {}; graphRes['Average'] = {};
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Outliers'] = {}; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {};
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
@@ -67,10 +67,10 @@
       _.each(results, function(item) {
         if(findP((item.key[0] - mean) / stddev) > Number(confidence)/100) {
           console.log("entered");
-          if(graphRes['Outliers'][item.key[1]] == undefined) {
-            graphRes['Outliers'][item.key[1]] = [];
+          if(graphRes['Outliers'][item.key[0]] == undefined) {
+            outliers['Outliers'][item.key[0]] = {};
           }
-          graphRes['Outliers'][item.key[1]].push(item.key[0]);
+          outliers['Outliers'][item.key[0]] = item.key[1];
         }
       });
       console.log(graphRes);
@@ -81,7 +81,7 @@
       console.log(graphRes);
       delete graphRes['All'];
       eventGraph.MPChart('setData', graphRes);
-      eventTable.MPTable('setData', graphRes['Outliers']);
+      eventTable.MPTable('setData', outliers);
     });
   }
   
