@@ -24,7 +24,9 @@
   <div id="table"></div>
   </div>
   <script>
+  document.getElementById("selector").defaultValue = "95";
   var script = document.getElementById('query').innerHTML;
+  var confidence = document.getElementById('selector').value;
   var dateSelect = $('#dateSelect').MPDatepicker();
   var eventGraph = $('#graph').MPChart({chartType: 'line'});
   var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Frequency'});
