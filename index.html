@@ -39,10 +39,11 @@
       _.each(results, function(item) {
         if(graphRes['All'][item.key[1]] == undefined) {
           graphRes['All'][item.key[1]] = item.key[0];
+          graphRes['Total'][item.key[1]] = 1;
         } else {
           graphRes['All'][item.key[1]] += item.key[0];
+          graphRes['Total'][item.key[1]] += 1;
         }
-        graphRes['Total'][item.key[1]] += 1;
         variance += item.key[0] * item.key[0];
         sum += item.key[0];
         total += 1;
@@ -63,11 +64,11 @@
         }
       });
       console.log(graphRes);
-      _.each(graphRes, function(item) {
+      _.each(graphRes['All'], function(item) {
         console.log(item);
         console.log(item.key);
         console.log(item.value);
-        graphRes['Average'][item.key] = graphRes['All'][item.key[0]] / graphRes['Total'][item.key[0]];
+        graphRes['Average'][item.key] = graphRes['All'][item.key] / graphRes['Total'][item.key;
       })
       graphRes.splice('All');
       graphRes.splice('Total');
