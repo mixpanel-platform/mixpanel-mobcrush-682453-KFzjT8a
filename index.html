@@ -32,7 +32,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Outliers'] = {};
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Outliers'] = {}; graphRes['Total'] = {}; graphRes['Average'] = {};
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
@@ -42,6 +42,8 @@
         } else {
           graphRes['All'][item.key[1]] += item.key[0];
         }
+        graphRes['Total'] += 1;
+        variance += item.key[0] * item.key[0];
         sum += item.key[0];
         total += 1;
       });
@@ -49,9 +51,6 @@
       console.log(sum);
       console.log(total);
       console.log(mean);
-      _.each(results, function(item) {
-        variance += item.key[0] * item.key[0];
-      });
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
@@ -63,10 +62,15 @@
           }
         }
       });
+      _.each(graphRes['All'], function(item) {
+        graphRes['Average'][item.key[0]] = graphRes['All'][item.key[0]] / graphRes['Total'][item.key[0]];
+      })
+      graphRes.splice('All');
+      graphRes.splice('Total');
       console.log(res);
       console.log(graphRes);
       eventGraph.MPChart('setData', graphRes);
-      eventTable.MPTable('setData', res);
+      eventTable.MPTable('setData', graphRes['Outliers']);
     });
   }
   dateSelect.on('change', function() {runQuery();});
