@@ -60,7 +60,7 @@
       stddev = Math.sqrt(variance / mean);
       console.log(stddev);
       _.each(results, function(item) {
-        if(item.key[0] > mean + findZ(confidence)*stddev) {
+        if(item.key[0] > mean + findZ(confidence/100)*stddev) {
           if(graphRes['Outliers'][item.key[1]] == undefined) {
             graphRes['Outliers'][item.key[1]] = item.key[0];
           } else {
