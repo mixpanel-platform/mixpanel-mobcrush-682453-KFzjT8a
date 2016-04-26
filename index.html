@@ -16,8 +16,9 @@
        .groupBy(["properties.Duration", function(event) { return new Date(event.time).toString().substr(0,10);}], mixpanel.reducer.count());
     }
   </script>
-  <div class="mixpanel-platform-section">
+  Confidence: <div class="mixpanel-platform-section">
   <div id="dateSelect" style="float: right;"></div>
+  <div style="clear: both;"></div>
   <div id="input" style="float: left;"><input type="text" id="selector"></div>
   <div id="graph"></div>
   <div id="table"></div>
