@@ -69,7 +69,7 @@
         graphRes['Average'][keys[i]] = graphRes['All'][keys[i]] / graphRes['Total'][keys[i]];
       }
       console.log(graphRes);
-      graphRes.splice('All');
+      delete graphRes['All'];
       eventGraph.MPChart('setData', graphRes);
       eventTable.MPTable('setData', graphRes['Outliers']);
     });
