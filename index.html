@@ -70,8 +70,7 @@
         console.log(item.value);
         graphRes['Average'][item.key] = graphRes['All'][item.key] / graphRes['Total'][item.key];
       })
-      graphRes.splice('All');
-      graphRes.splice('Total');
+      
       console.log(res);
       console.log(graphRes);
       eventGraph.MPChart('setData', graphRes);
