@@ -25,7 +25,7 @@
   <script>
   var script = document.getElementById('query').innerHTML;
   var dateSelect = $('#dateSelect').MPDatepicker();
-  var eventGraph = $('#graph').MPChart({chartType: 'line'});
+  var eventGraph = $('#graph').MPChart({chartType: 'bar'});
   var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Duration'});
   function runQuery() {
     var params = {
