@@ -64,15 +64,13 @@
       console.log(confidence);
       console.log(Number(confidence));
       console.log(zscore);
-      
       _.each(results, function(item) {
         if(findP((item.key[0] - mean) / stddev) > Number(confidence)/100) {
           console.log("entered");
           if(graphRes['Outliers'][item.key[1]] == undefined) {
-            graphRes['Outliers'][item.key[1]] = item.key[0];
-          } else {
-            graphRes['Outliers'][item.key[1]] += item.key[0];
+            graphRes['Outliers'][item.key[1]] = [];
           }
+          graphRes['Outliers'][item.key[1]].push(item.key[0]);
         }
       });
       console.log(graphRes);
