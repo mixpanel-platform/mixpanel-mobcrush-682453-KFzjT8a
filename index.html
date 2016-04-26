@@ -29,7 +29,7 @@
   var confidence = document.getElementById('selector').value;
   var dateSelect = $('#dateSelect').MPDatepicker();
   var eventGraph = $('#graph').MPChart({chartType: 'line'});
-  var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Frequency'});
+  var eventTable = $('#table').MPTable({showPercentages: false, firstColHeader: 'Duration'});
   function runQuery() {
     console.log(confidence);
     var params = {
@@ -67,10 +67,10 @@
       _.each(results, function(item) {
         if(findP((item.key[0] - mean) / stddev) > Number(confidence)/100) {
           console.log("entered");
-          if(graphRes['Outliers'][item.key[1]] === undefined) {
-            outliers['Outliers'][item.key[1]] = {};
+          if(graphRes['Outliers'][item.key[0]] === undefined) {
+            outliers['Outliers'][item.key[0]] = {};
           }
-          outliers['Outliers'][item.key[1]] = item.key[1];
+          outliers['Outliers'][item.key[0]] = item.key[1];
         }
       });
       console.log(graphRes);
