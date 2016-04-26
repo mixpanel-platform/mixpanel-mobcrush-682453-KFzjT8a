@@ -35,7 +35,7 @@
       'event': 'Broadcast'
     };
     MP.api.custom_query(script, params).done(function(results) {
-      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; var tableOutliers = {}: outliers['10%'] = 0; outliers['20%'] = 0; outliers['30%'] = 0; outliers['40%'] = 0; outliers['50%'] = 0; outliers['60%'] = 0; outliers['70%'] = 0; outliers['80%'] = 0; outliers['90%'] = 0; outliers['100%'] = 0;
+      var graphRes = {}; graphRes['All'] = {}; var total = 0; var sum = 0; var mean = 0; var variance = 0; var stddev = 0; graphRes['Total'] = {}; graphRes['Average'] = {}; var outliers = {}; var tableOutliers = {}; outliers['10%'] = 0; outliers['20%'] = 0; outliers['30%'] = 0; outliers['40%'] = 0; outliers['50%'] = 0; outliers['60%'] = 0; outliers['70%'] = 0; outliers['80%'] = 0; outliers['90%'] = 0; outliers['100%'] = 0;
       var res = _.chain(results).map(function(item) {var obj = {}; obj.Property = item.key[0]? item.key[0]: 'No Property'; obj.Date = item.key[1]; return obj;}).sortBy(item => -1 * item.Count).value();res.unshift(''); delete res[0];
       console.log(results);
       console.log(res);
